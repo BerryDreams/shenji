@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/audit.iml" filepath="$PROJECT_DIR$/audit.iml" />
+      <module fileurl="file://$PROJECT_DIR$/audit-dao/audit-dao.iml" filepath="$PROJECT_DIR$/audit-dao/audit-dao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/audit-model/audit-model.iml" filepath="$PROJECT_DIR$/audit-model/audit-model.iml" />
+      <module fileurl="file://$PROJECT_DIR$/audit-service/audit-service.iml" filepath="$PROJECT_DIR$/audit-service/audit-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/audit-web/audit-web.iml" filepath="$PROJECT_DIR$/audit-web/audit-web.iml" />
+    </modules>
+  </component>
+</project>
