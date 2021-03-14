@@ -1,12 +1,13 @@
 package com.shenji.audit.model;
 
 import lombok.Data;
+
 /**
- * 角色实体类
+ * TODO
  *
  * @author misxr
  * @version 1.0
- * @date 2021/3/12 11:22
+ * @date 2021/3/13 13:16
  */
 @Data
 public class Role {
