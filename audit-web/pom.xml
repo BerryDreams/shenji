@@ -6,7 +6,6 @@
         <groupId>com.shenji</groupId>
         <artifactId>audit</artifactId>
         <version>1.0</version>
-        <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <artifactId>audit-web</artifactId>
