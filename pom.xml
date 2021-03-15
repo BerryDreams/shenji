@@ -8,6 +8,7 @@
         <module>audit-dao</module>
         <module>audit-service</module>
         <module>audit-web</module>
+        <module>audit-shiro</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

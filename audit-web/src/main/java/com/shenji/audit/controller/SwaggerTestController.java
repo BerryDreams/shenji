@@ -1,7 +1,7 @@
 package com.shenji.audit.controller;
 
 import com.shenji.audit.result.RespBean;
-import com.shenji.audit.result.RespBeanType;
+import com.shenji.audit.result.StatusType;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -25,6 +25,6 @@ public class SwaggerTestController {
     @GetMapping("/swagger/test")
     @ApiOperation("swagger测试")
     public RespBean testSwagger(@ApiParam(name = "input", value="hello的值")@RequestParam(value = "input") String hello) {
-        return RespBean.build(hello, RespBeanType.OK);
+        return RespBean.build(hello, StatusType.OK);
     }
 }
