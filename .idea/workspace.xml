@@ -4,7 +4,35 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6762cfef-3242-4528-82af-2e300121241c" name="Default Changelist" comment="初步搭建mybatis" />
+    <list default="true" id="6762cfef-3242-4528-82af-2e300121241c" name="Default Changelist" comment="idea配置文件">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_classmate_1_5_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_guava_guava_20_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_springfox_springfox_core_2_9_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_springfox_springfox_schema_2_9_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_springfox_springfox_spi_2_9_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_springfox_springfox_spring_web_2_9_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_springfox_springfox_swagger2_2_9_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_springfox_springfox_swagger_common_2_9_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_springfox_springfox_swagger_ui_2_9_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_swagger_swagger_annotations_1_5_20.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_swagger_swagger_models_1_5_20.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_mapstruct_mapstruct_1_2_0_Final.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_plugin_spring_plugin_core_1_2_0_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_plugin_spring_plugin_metadata_1_2_0_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/audit-model/src/main/java/com/shenji/audit/result/RespBean.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/audit-model/src/main/java/com/shenji/audit/result/RespBeanType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/audit-web/src/main/java/com/shenji/audit/config/Swagger2Config.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/audit-web/src/main/java/com/shenji/audit/controller/SwaggerTestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_security_2_4_3.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_security_spring_security_config_5_4_5.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/audit-dao/audit-dao.iml" beforeDir="false" afterPath="$PROJECT_DIR$/audit-dao/audit-dao.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/audit-model/audit-model.iml" beforeDir="false" afterPath="$PROJECT_DIR$/audit-model/audit-model.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/audit-model/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/audit-model/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/audit-model/src/main/java/com/shenji/audit/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/audit-model/src/main/java/com/shenji/audit/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/audit-service/audit-service.iml" beforeDir="false" afterPath="$PROJECT_DIR$/audit-service/audit-service.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/audit-web/src/main/java/com/shenji/audit/AuditWebApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/audit-web/src/main/java/com/shenji/audit/AuditWebApplication.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,17 +41,15 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
     <option name="SCHEME" value="Project" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="ProblemsViewState">
-    <option name="selectedIndex" value="1" />
   </component>
   <component name="ProjectId" id="1pc5Z1YaZCOdbs8B2Ma2cNW8wgU" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -33,6 +59,10 @@
   </component>
   <component name="PropertiesComponent">
     <property name="DatabaseDriversLRU" value="mysql" />
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
@@ -50,14 +80,16 @@
       <recent name="billweb" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.AuditWebApplicationTests.contextLoads">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+  <component name="RunManager" selected="Spring Boot.AuditWebApplication">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -116,7 +148,8 @@
       <workItem from="1615693287796" duration="126000" />
       <workItem from="1615718315008" duration="2775000" />
       <workItem from="1615722155531" duration="2024000" />
-      <workItem from="1615735767653" duration="303000" />
+      <workItem from="1615735767653" duration="1692000" />
+      <workItem from="1615766959528" duration="3450000" />
     </task>
     <task id="LOCAL-00001" summary="初步搭建mybatis">
       <created>1615724119535</created>
@@ -125,7 +158,21 @@
       <option name="project" value="LOCAL" />
       <updated>1615724119535</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="配置文件">
+      <created>1615736116984</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1615736116984</updated>
+    </task>
+    <task id="LOCAL-00003" summary="idea配置文件">
+      <created>1615736307364</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1615736307364</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -142,7 +189,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/master" />
+                        <option value="origin/tao_01" />
                       </list>
                     </value>
                   </entry>
@@ -157,6 +204,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="初步搭建mybatis" />
-    <option name="LAST_COMMIT_MESSAGE" value="初步搭建mybatis" />
+    <MESSAGE value="配置文件" />
+    <MESSAGE value="idea配置文件" />
+    <option name="LAST_COMMIT_MESSAGE" value="idea配置文件" />
   </component>
 </project>
