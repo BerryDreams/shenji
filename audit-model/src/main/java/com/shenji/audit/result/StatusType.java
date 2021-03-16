@@ -9,7 +9,9 @@ package com.shenji.audit.result;
  */
 public enum StatusType {
 
-    OK("00200","成功");
+    OK("00200","成功"),
+
+    USER_INPUT_ERROR("00400", "用户输入错误");
 
 
 
