@@ -1,5 +1,6 @@
 package com.shenji.audit.result;
 
+import com.shenji.audit.type.RespType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,10 +33,10 @@ public class CustomException extends RuntimeException{
         this.msg = msg;
     }
 
-    public CustomException(StatusType statusType) {
-        super(statusType.getStatus());
-        this.status = statusType.getStatus();
-        this.msg = statusType.getMsg();
+    public CustomException(RespType respType) {
+        super(respType.getStatus());
+        this.status = respType.getStatus();
+        this.msg = respType.getMsg();
     }
 
     public CustomException(String status, String msg, Throwable cause) {

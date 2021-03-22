@@ -1,5 +1,6 @@
 package com.shenji.audit.model;
 
+import com.shenji.audit.shiro.Permission;
 import com.shenji.audit.shiro.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,9 +21,12 @@ import java.util.Set;
 @NoArgsConstructor
 public class User {
 
-    private Integer id;
-    private String username;
-    private String password;
-    private String name;
-    private Set<Role> roles;
+    private Integer id;        //用户id
+    private String username;   //用户名
+    private String password;   //用户密码
+    private String name;       //用户姓名
+    private String post;       //用户职务
+    private String signature;  //用户签名地址
+    private Set<Role> roles;    //角色
+    private Set<Permission> permissions;  //权限
 }

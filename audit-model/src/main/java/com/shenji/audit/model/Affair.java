@@ -1,5 +1,7 @@
 package com.shenji.audit.model;
 
+import lombok.Data;
+
 import java.util.Date;
 import java.util.List;
 
@@ -10,13 +12,16 @@ import java.util.List;
  * @date 2021/3/14
  */
 
-//@Data
+@Data
 public class Affair {
     private Integer id;                 //事务id
-    private String remark;              //备注
-    private List<User> promoters;       //事务发起人
-    private List<User> approvers;       //事务审批人
-    private List<Date> schedule;        //进度，有效期（开始时间、终止时间），每过一个里程碑记录一个时间进度？？？
-//    private List<String> schedule;       或者分开
-//    private List<Date> term_of_validity;
+    private String remark;              //备注详情
+    private String kind;                //事务类型（小事务无收集资料状态）
+    private Integer state;               //事务状态（收集资料中，编写草稿中，审批中，审批结束）
+
+    private Date startTime;           //创建时间
+    private Date endTime;              //结束时间
+
+    private Integer approverId;      //事务当前审批人id
+    private Integer promoters;       //事务发起人id
 }

@@ -1,5 +1,6 @@
 package com.shenji.audit.result;
 
+import com.shenji.audit.type.RespType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -35,12 +36,12 @@ public class RespBean {
         return new RespBean();
     }
 
-    public static RespBean build(StatusType statusType) {
-        return new RespBean(statusType.getStatus(), statusType.getMsg(), null);
+    public static RespBean build(RespType respType) {
+        return new RespBean(respType.getStatus(), respType.getMsg(), null);
     }
 
-    public static RespBean build(Object obj, StatusType statusType) {
-        return new RespBean(statusType.getStatus(), statusType.getMsg(), obj);
+    public static RespBean build(Object obj, RespType respType) {
+        return new RespBean(respType.getStatus(), respType.getMsg(), obj);
     }
 
     public static RespBean build(CustomException customException) {
