@@ -3,6 +3,8 @@ package com.shenji.audit.model;
 import com.shenji.audit.shiro.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 import java.util.Set;
 
@@ -15,6 +17,7 @@ import java.util.Set;
  */
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     private Integer id;

@@ -34,7 +34,7 @@ public class ShiroService {
         Role role = new Role(1, "admin", permissionsSet);
         Set<Role> roleSet = new HashSet<>();
         roleSet.add(role);
-        User user = new User(1, "wsl", "123456", "lwt", roleSet);
+        User user = new User(1, "lwt", "123456", "lwt", roleSet);
         Map<String, User> map = new HashMap<>();
         map.put(user.getUsername(), user);
 
@@ -43,7 +43,7 @@ public class ShiroService {
         Role role1 = new Role(2, "user", permissionsSet1);
         Set<Role> roleSet1 = new HashSet<>();
         roleSet1.add(role1);
-        User user1 = new User(2, "zhangsan", "123456", "czg", roleSet1);
+        User user1 = new User(2, "czg", "123456", "czg", roleSet1);
         map.put(user1.getUsername(), user1);
         return map.get(username);
     }

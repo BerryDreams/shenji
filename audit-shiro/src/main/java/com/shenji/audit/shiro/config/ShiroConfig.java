@@ -1,8 +1,15 @@
 package com.shenji.audit.shiro.config;
 
+import com.shenji.audit.shiro.filter.JWTFilter;
+import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
+import org.apache.shiro.mgt.DefaultSubjectDAO;
+import org.apache.shiro.session.mgt.DefaultSessionManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.subject.Subject;
+import org.apache.shiro.subject.SubjectContext;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.mgt.DefaultWebSubjectFactory;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -29,39 +36,51 @@ public class ShiroConfig {
         return defaultAAP;
     }
 
-    //将自己的验证方式加入容器
     @Bean
     public CustomRealm myShiroRealm() {
         CustomRealm customRealm = new CustomRealm();
         return customRealm;
     }
 
-    //权限管理，配置主要是Realm的管理认证
     @Bean
     public DefaultWebSecurityManager defaultWebSecurityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+        DefaultSessionManager defaultSessionManager = new DefaultSessionManager();
+        defaultSessionManager.setSessionValidationSchedulerEnabled(false);
+        securityManager.setSessionManager(defaultSessionManager);
+
+        securityManager.setSubjectFactory(new DefaultWebSubjectFactory() {
+            @Override
+            public Subject createSubject(SubjectContext context) {
+                context.setSessionCreationEnabled(false);
+                return super.createSubject(context);
+            }
+        });
+
+        DefaultSubjectDAO defaultSubjectDAO = (DefaultSubjectDAO)securityManager.getSubjectDAO();
+        DefaultSessionStorageEvaluator defaultSessionStorageEvaluator = (DefaultSessionStorageEvaluator) defaultSubjectDAO
+                .getSessionStorageEvaluator();
+        defaultSessionStorageEvaluator.setSessionStorageEnabled(false);
+
+
         securityManager.setRealm(myShiroRealm());
         return securityManager;
     }
 
-    //Filter工厂，设置对应的过滤条件和跳转条件
     @Bean
     public ShiroFilterFactoryBean shiroFilterFactoryBean(DefaultWebSecurityManager defaultWebSecurityManager) {
-        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-        shiroFilterFactoryBean.setSecurityManager(defaultWebSecurityManager);
+        ShiroFilterFactoryBean factory = new ShiroFilterFactoryBean();
+        factory.setSecurityManager(defaultWebSecurityManager);
+        factory.getFilters().put("JWT", new JWTFilter());
+
         Map<String, String> map = new HashMap<>();
-        //登出
-        map.put("/logout", "logout");
-        //对所有用户认证
-        map.put("/**", "authc");
-        //登录
-        shiroFilterFactoryBean.setLoginUrl("/api/shiro/login");
-        //首页
-        shiroFilterFactoryBean.setSuccessUrl("/index");
-        //错误页面，认证不通过跳转
-        shiroFilterFactoryBean.setUnauthorizedUrl("/error");
-        shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
-        return shiroFilterFactoryBean;
+        map.put("/**", "JWT");
+        factory.setFilterChainDefinitionMap(map);
+
+        factory.setLoginUrl("/api/shiro/login");
+        factory.setSuccessUrl("/index");
+        factory.setUnauthorizedUrl("/error");
+        return factory;
     }
 
 

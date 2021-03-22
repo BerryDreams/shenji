@@ -4,6 +4,7 @@ import com.alibaba.druid.util.StringUtils;
 import com.shenji.audit.model.User;
 import com.shenji.audit.result.RespBean;
 import com.shenji.audit.result.StatusType;
+import com.shenji.audit.shiro.util.JWTUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -32,17 +33,19 @@ public class TestController {
 
     @GetMapping("/shiro/login")
     @ApiOperation("shiro测试")
-    public RespBean testShiroLogin(@ApiParam(name = "input", value="hello的值")User user) {
+    public RespBean testShiroLogin(@ApiParam(name = "username&password", value="hello的值")User user) {
         if (StringUtils.isEmpty(user.getUsername()) || StringUtils.isEmpty(user.getPassword())) {
             return RespBean.build(StatusType.USER_INPUT_ERROR);
         }
-        //用户认证信息
-        Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(
                 user.getUsername(),
                 user.getPassword()
         );
-        subject.login(usernamePasswordToken);
-        return RespBean.build(StatusType.OK);
+        try {
+            SecurityUtils.getSubject().login(usernamePasswordToken);
+        }catch (Exception e) {
+            return RespBean.build(StatusType.USER_INPUT_ERROR);
+        }
+        return RespBean.build(JWTUtil.generateToken(user.getUsername()), StatusType.OK);
     }
 }
