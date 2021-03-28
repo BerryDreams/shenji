@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shenji.audit.dao.MaterialMapper" >
+    <insert id="insertOne" parameterType="com.shenji.audit.model.MaterialLog">
+        INSERT INTO material_log(id, name, remark, affair_id, create_time, author_id)
+        VALUES (#{id}, #{name}, #{remark}, #{affairId}, #{createTime}, #{authorId})
+    </insert>
+
+    <select id="getMaterialByAffairId" resultType="com.shenji.audit.model.MaterialLog">
+        SELECT * FROM material_log WHERE affair_id = #{affairId}
+    </select>
+</mapper>

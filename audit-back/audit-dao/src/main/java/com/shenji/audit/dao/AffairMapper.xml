@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shenji.audit.dao.AffairMapper" >
+    <insert id="insertOne" parameterType="com.shenji.audit.model.Affair">
+        INSERT INTO affair(id, name, remark, `kind`, `state`, start_time, end_time, promoter_id, approver_id)
+        VALUES(#{id}, #{name}, #{remark}, #{kind}, #{state}, #{startTime}, #{endTime}, #{promoterId}, #{approverId})
+    </insert>
+
+    <select id="getAffairById" parameterType="Long" resultType="com.shenji.audit.model.Affair">
+        SELECT * FROM affair WHERE id = #{id}
+    </select>
+
+    <select id="getAffairByPromoterId" parameterType="Long" resultType="com.shenji.audit.model.Affair">
+        SELECT * FROM affair WHERE promoter_id = #{promoterId}
+    </select>
+
+    <select id="getAffairByApproverId" parameterType="Long" resultType="com.shenji.audit.model.Affair">
+        SELECT * FROM affair WHERE approver_id = #{approverId}
+    </select>
+
+    <select id="selectAll" resultType="com.shenji.audit.model.Affair">
+        SELECT * FROM affair
+    </select>
+
+    <update id="updateState">
+        UPDATE affair SET `state` = #{state} WHERE id = #{id}
+    </update>
+</mapper>
