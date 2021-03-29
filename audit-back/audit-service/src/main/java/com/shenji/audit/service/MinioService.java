@@ -15,7 +15,9 @@ import java.util.List;
  */
 public interface MinioService {
 
-    void putDocument(Long id, String type, List<FileData> fileList);
+    void putSomeDocument(Long id, String type, List<FileData> fileList);
+
+    void putDocument(Long id, String type, FileData fileList);
 
     FileData getDocument(Long id, String type, String filename);
 

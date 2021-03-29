@@ -23,6 +23,6 @@
     </select>
 
     <update id="updateState">
-        UPDATE affair SET `state` = #{state} WHERE id = #{id}
+        UPDATE affair SET `state` = #{state} WHERE id = #{affairId}
     </update>
 </mapper>

@@ -3,9 +3,7 @@ package com.shenji.audit.service.impl;
 import com.shenji.audit.common.CustomException;
 import com.shenji.audit.common.FileData;
 import com.shenji.audit.dao.AffairMapper;
-import com.shenji.audit.dao.ApprovalMapper;
 import com.shenji.audit.dao.MaterialMapper;
-import com.shenji.audit.dao.ReportMapper;
 import com.shenji.audit.model.MaterialLog;
 import com.shenji.audit.service.MaterialService;
 import com.shenji.audit.service.MinioService;
@@ -45,10 +43,10 @@ public class MaterialServiceImpl implements MaterialService {
     public void uploadMaterial(Long userId, Long affairId, String name, String remark, List<FileData> fileList){
 
         //判断是否可以上传
-//        if(!affairMapper.getAffairById(affairId).getState().equals(AffairType.STATE_READY)) {
-//            log.error("目前不可上传资料");
-//            throw new CustomException("目前不可上传资料");
-//        }
+        if(!affairMapper.getAffairById(affairId).getState().equals(AffairType.STATE_READY)) {
+            log.error("目前不可上传资料");
+            throw new CustomException("目前不可上传资料");
+        }
 
         Long materialLogId = IDKeyUtil.generateId();
 
@@ -64,7 +62,7 @@ public class MaterialServiceImpl implements MaterialService {
         materialMapper.insertOne(materialLog);
 
         try {
-            minioService.putDocument(materialLogId, MinioType.MATERIAL, fileList);
+            minioService.putSomeDocument(materialLogId, MinioType.MATERIAL, fileList);
         }catch (CustomException e) {
             log.error(e.getMsg());
         }

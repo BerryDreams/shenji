@@ -29,12 +29,19 @@ import java.util.List;
 public class MinioServiceImpl implements MinioService {
 
     @Override
-    public void putDocument(Long id, String type, List<FileData> fileList) {
+    public void putSomeDocument(Long id, String type, List<FileData> fileList) {
         for(FileData file : fileList) {
             String innerPath = getInnerPath(type, id, file.getName());
             InputStream is = new ByteArrayInputStream(file.getData());
             MinioUtil.uploadFile(is, innerPath, file.getName());
         }
+    }
+
+    @Override
+    public void putDocument(Long id, String type, FileData file) {
+        String innerPath = getInnerPath(type, id, file.getName());
+        InputStream is = new ByteArrayInputStream(file.getData());
+        MinioUtil.uploadFile(is, innerPath, file.getName());
     }
 
     @Override

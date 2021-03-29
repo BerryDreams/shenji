@@ -15,11 +15,13 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +34,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api")
-@Api("资料相关接口")
+@Api(tags = "资料接口")
 public class MaterialController {
 
     @Autowired
@@ -88,6 +90,10 @@ public class MaterialController {
     public ResponseEntity<byte[]> getMaterialFile(@PathVariable("id")Long id, @PathVariable("filename") String filename) {
         FileData fileData = materialService.getMaterial(1L, id, filename);
         HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        httpHeaders.add("Content-Disposition",
+                "attachment; filename=" +
+                        new String(fileData.getName().getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1));
         httpHeaders.set("Content-Type", MinioUtil.getContextType(filename));
         return new ResponseEntity<>(fileData.getData(), httpHeaders, HttpStatus.OK);
     }

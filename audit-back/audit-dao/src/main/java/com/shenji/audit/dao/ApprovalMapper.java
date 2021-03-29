@@ -1,5 +1,7 @@
 package com.shenji.audit.dao;
 
+import com.shenji.audit.model.ApprovalLog;
+
 /**
  * TODO
  *
@@ -8,4 +10,7 @@ package com.shenji.audit.dao;
  * @date 2021/3/22 20:28
  */
 public interface ApprovalMapper {
+
+    void insertOne(ApprovalLog approvalLog);
+
 }

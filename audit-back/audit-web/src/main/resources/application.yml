@@ -1,17 +1,3 @@
 spring:
-  datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    username: lwtczg
-    password: lwtczg
-    url: jdbc:mysql://baixx.site:3306/audit?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
-
-mybatis:
-  configuration:
-    map-underscore-to-camel-case: true
-
-server:
-  port: 18080
-
-logging:
-  file:
-    path: D:\\shenji
+  profiles:
+    active: '@profiles.active@'

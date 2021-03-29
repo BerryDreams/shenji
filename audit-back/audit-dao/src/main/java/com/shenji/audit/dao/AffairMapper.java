@@ -24,4 +24,6 @@ public interface AffairMapper {
     List<Affair> selectAll();
 
     void updateState(Integer state, Long affairId);
+
+    void nextApprover();
 }

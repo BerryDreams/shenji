@@ -13,13 +13,13 @@ import java.util.List;
  */
 public interface ReportService {
 
-    void postSource(Long userId, Long affairId, String name, List<FileData> fileList);
+    void postSource(Long userId, Long affairId, List<FileData> fileList);
 
-    List<String> getPDFList(Long userId, Long reportId);
+    List<String> getPDFList(Long userId, Long affairId);
 
-    FileData getPDF(Long userId, Long reportId, String filename);
+    FileData getPDF(Long userId, Long affairId);
 
-    List<String> getSourceList(Long userId, Long reportId);
+    List<String> getSourceList(Long userId, Long affairId);
 
-    FileData getSource(Long userId, Long reportId, String filename);
+    FileData getSource(Long userId, Long affairId, String filename);
 }

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api")
-@Api("审计事务接口")
+@Api(tags = "事务接口")
 public class AffairController {
 
     @Autowired
@@ -48,12 +48,12 @@ public class AffairController {
     @GetMapping("/my_affair")
     @ApiOperation("获取我发起的事务")
     public RespBean getMyAffair() {
-        return RespBean.build(RespType.OK);
+        return RespBean.build(affairService.getMyAffair(1L), RespType.OK);
     }
 
     @GetMapping("/my_approval")
     @ApiOperation("获取待我审批的事务")
     public RespBean getMyApproval() {
-        return RespBean.build(RespType.OK);
+        return RespBean.build(affairService.getMyApproval(1L), RespType.OK);
     }
 }

@@ -1,7 +1,5 @@
 package com.shenji.audit.model;
 
-import com.shenji.audit.shiro.Permission;
-import com.shenji.audit.shiro.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
