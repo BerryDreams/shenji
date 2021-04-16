@@ -10,7 +10,7 @@ mybatis:
     map-underscore-to-camel-case: true
 
 server:
-  port: 18080
+  port: 80
 
 logging:
   file:

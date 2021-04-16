@@ -105,7 +105,7 @@ public class MinioUtil {
 
     private static void getMinioClient() {
         try {
-            minioClient = new MinioClient("http://baixx.site:9000", "misxress@outlook.com", "like1wind$");
+            minioClient = new MinioClient("http://localhost:8080", "miniolwtczg", "miniolwtczg");
         } catch (Exception e) {
             log.error("创建minioClient失败");
         }
