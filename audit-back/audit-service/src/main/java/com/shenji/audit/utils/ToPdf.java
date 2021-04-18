@@ -13,12 +13,11 @@ import java.util.List;
  */
 public class ToPdf {
 
-    public static FileData genReport(List<FileData> sourceFile) {
+    public static void genReport(String fullPath, List<FileData> sourceFile) {
 
         FileData fileData = new FileData();
         fileData.setName("生成报告(功能开发中).pdf");
         fileData.setData(new byte[12]);
-        return fileData;
     }
 
     private static void execCmd() {

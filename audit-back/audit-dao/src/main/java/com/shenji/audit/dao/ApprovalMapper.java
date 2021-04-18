@@ -12,5 +12,5 @@ import com.shenji.audit.model.ApprovalLog;
 public interface ApprovalMapper {
 
     void insertOne(ApprovalLog approvalLog);
-
+    
 }

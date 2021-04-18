@@ -9,4 +9,8 @@
     <select id="getMaterialByAffairId" resultType="com.shenji.audit.model.MaterialLog">
         SELECT * FROM material_log WHERE affair_id = #{affairId}
     </select>
+
+    <select id="selectOne" resultType="com.shenji.audit.model.MaterialLog">
+        SELECT * FROM material_log WHERE id = #{materialId}
+    </select>
 </mapper>

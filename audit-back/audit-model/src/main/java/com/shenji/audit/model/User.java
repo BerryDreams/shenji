@@ -23,5 +23,5 @@ public class User {
     private String username;   //用户名
     private String password;   //用户密码
     private String name;       //用户姓名
-    private String post;       //用户职务
+    private Integer post;       //用户职务
 }

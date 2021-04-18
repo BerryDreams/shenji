@@ -4,14 +4,10 @@ import com.shenji.audit.common.FileData;
 import com.shenji.audit.common.RespBean;
 import com.shenji.audit.model.MaterialLog;
 import com.shenji.audit.service.MaterialService;
-import com.shenji.audit.service.MinioService;
-import com.shenji.audit.type.MinioType;
 import com.shenji.audit.type.RespType;
 import com.shenji.audit.utils.MinioUtil;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -36,9 +32,6 @@ import java.util.List;
 @RequestMapping("/api")
 @Api(tags = "资料接口")
 public class MaterialController {
-
-    @Autowired
-    private MinioService minioService;
 
     @Autowired
     private MaterialService materialService;
@@ -81,7 +74,7 @@ public class MaterialController {
     @GetMapping("/material/{material_id}")
     @ApiOperation("获取资料文件列表")
     public RespBean getMaterialFileList(@PathVariable("material_id") Long id) {
-        List<String> list = materialService.getMaterialFileList(1L, id);
+        List<String> list = materialService.getMaterialFolder(1L, id);
         return RespBean.build(list, RespType.OK);
     }
 

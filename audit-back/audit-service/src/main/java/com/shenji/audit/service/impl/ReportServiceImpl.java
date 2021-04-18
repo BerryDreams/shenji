@@ -5,17 +5,17 @@ import com.shenji.audit.common.FileData;
 import com.shenji.audit.dao.AffairMapper;
 import com.shenji.audit.dao.ApprovalMapper;
 import com.shenji.audit.dao.MaterialMapper;
-import com.shenji.audit.service.MinioService;
 import com.shenji.audit.service.ReportService;
 import com.shenji.audit.type.AffairType;
 import com.shenji.audit.type.MinioType;
-import com.shenji.audit.utils.IDKeyUtil;
+import com.shenji.audit.utils.MinioUtil;
 import com.shenji.audit.utils.ToPdf;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -39,9 +39,6 @@ public class ReportServiceImpl implements ReportService {
     @Resource
     private MaterialMapper materialMapper;
 
-    @Resource
-    private MinioService minioService;
-
 
     @Override
     public void postSource(Long userId, Long affairId, List<FileData> fileList) {
@@ -54,8 +51,10 @@ public class ReportServiceImpl implements ReportService {
         }
 
         try {
-            minioService.putSomeDocument(affairId, MinioType.SOURCE_REPORT, fileList);
-            minioService.putDocument(affairId, MinioType.PDF_REPORT, ToPdf.genReport(fileList));
+            for(FileData file : fileList) {
+                MinioUtil.uploadFile(MinioType.sourcePrefix(affairId) + file.getName(), file.getData());
+            }
+            ToPdf.genReport(MinioType.pdfPrefix(affairId) + "报告.pdf", fileList);
         }catch (CustomException e) {
             log.error(e.getMsg());
         }
@@ -65,24 +64,17 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List<String> getPDFList(Long userId, Long affairId) {
-        return minioService.getDocumentList(affairId, MinioType.PDF_REPORT);
-    }
-
-    @Override
     public FileData getPDF(Long userId, Long affairId) {
-        List<String> fileDataList = minioService.getDocumentList(affairId, MinioType.PDF_REPORT);
-        String filename = fileDataList.get(0);
-        return minioService.getDocument(affairId, MinioType.PDF_REPORT, filename);
+        return MinioUtil.getFileData(MinioType.pdfPrefix(affairId) + "报告.pdf");
     }
 
     @Override
     public List<String> getSourceList(Long userId, Long affairId) {
-        return minioService.getDocumentList(affairId, MinioType.SOURCE_REPORT);
+        return MinioUtil.listFile(MinioType.sourcePrefix(affairId));
     }
 
     @Override
     public FileData getSource(Long userId, Long affairId, String filename) {
-        return minioService.getDocument(affairId, MinioType.SOURCE_REPORT, filename);
+        return MinioUtil.getFileData(MinioType.sourcePrefix(affairId) + filename);
     }
 }

@@ -6,10 +6,10 @@ import com.shenji.audit.dao.AffairMapper;
 import com.shenji.audit.dao.MaterialMapper;
 import com.shenji.audit.model.MaterialLog;
 import com.shenji.audit.service.MaterialService;
-import com.shenji.audit.service.MinioService;
 import com.shenji.audit.type.AffairType;
 import com.shenji.audit.type.MinioType;
 import com.shenji.audit.utils.IDKeyUtil;
+import com.shenji.audit.utils.MinioUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,9 +36,6 @@ public class MaterialServiceImpl implements MaterialService {
     @Resource
     private MaterialMapper materialMapper;
 
-    @Resource
-    private MinioService minioService;
-
     @Override
     public void uploadMaterial(Long userId, Long affairId, String name, String remark, List<FileData> fileList){
 
@@ -62,7 +59,9 @@ public class MaterialServiceImpl implements MaterialService {
         materialMapper.insertOne(materialLog);
 
         try {
-            minioService.putSomeDocument(materialLogId, MinioType.MATERIAL, fileList);
+            for(FileData file : fileList) {
+                MinioUtil.uploadFile(MinioType.materialPrefix(affairId, materialLogId) + file.getName(), file.getData());
+            }
         }catch (CustomException e) {
             log.error(e.getMsg());
         }
@@ -75,17 +74,26 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public List<String> getMaterialFileList(Long userId, Long materialId) {
-        return minioService.getDocumentList(materialId, MinioType.MATERIAL);
+    public List<String> getMaterialFolder(Long userId, Long materialId) {
+        MaterialLog materialLog = materialMapper.selectOne(materialId);
+        return MinioUtil.listFile(MinioType.materialPrefix(materialLog.getAffairId(), materialId));
     }
 
     @Override
     public FileData getMaterial(Long userId, Long materialId, String filename) {
-        return minioService.getDocument(materialId, MinioType.MATERIAL, filename);
+        MaterialLog materialLog = materialMapper.selectOne(materialId);
+        return MinioUtil.getFileData(MinioType.materialPrefix(materialLog.getAffairId(), materialId) + filename);
     }
 
     @Override
     public void delMaterial(Long userId, Long materialId) {
-        minioService.removeDocument(materialId, MinioType.MATERIAL);
+        MaterialLog materialLog = materialMapper.selectOne(materialId);
+        MinioUtil.delFolder(MinioType.materialPrefix(materialLog.getAffairId(), materialId));
+    }
+
+    @Override
+    public void delFile(Long userId, Long materialId, String filename) {
+        MaterialLog materialLog = materialMapper.selectOne(materialId);
+        MinioUtil.delFile(MinioType.materialPrefix(materialLog.getAffairId(), materialId) + filename);
     }
 }

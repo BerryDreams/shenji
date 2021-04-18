@@ -20,9 +20,11 @@ public interface MaterialService {
 
     List<MaterialLog> getMaterialList(Long userId, Long affairId);
 
-    List<String> getMaterialFileList(Long userId, Long materialId);
+    List<String> getMaterialFolder(Long userId, Long materialId);
 
     FileData getMaterial(Long userId, Long materialId, String filename);
 
     void delMaterial(Long userId, Long materialId);
+
+    void delFile(Long userId, Long material, String filename);
 }

@@ -15,5 +15,7 @@ public interface MaterialMapper {
 
     void insertOne(MaterialLog materialLog);
 
+    MaterialLog selectOne(Long materialId);
+
     List<MaterialLog> getMaterialByAffairId(Long affairId);
 }

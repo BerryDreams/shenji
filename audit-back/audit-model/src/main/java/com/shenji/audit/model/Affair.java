@@ -25,5 +25,5 @@ public class Affair {
     private Date endTime;               //结束时间
 
     private Long promoterId;            //事务发起人id
-    private Long approverId;            //当前审批人id
+    private Integer approverPost;            //当前审批人职务
 }

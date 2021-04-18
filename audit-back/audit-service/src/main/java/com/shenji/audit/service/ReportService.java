@@ -15,8 +15,6 @@ public interface ReportService {
 
     void postSource(Long userId, Long affairId, List<FileData> fileList);
 
-    List<String> getPDFList(Long userId, Long affairId);
-
     FileData getPDF(Long userId, Long affairId);
 
     List<String> getSourceList(Long userId, Long affairId);

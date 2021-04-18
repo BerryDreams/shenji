@@ -5,14 +5,13 @@ import com.shenji.audit.dao.*;
 import com.shenji.audit.model.*;
 import com.shenji.audit.common.CustomException;
 import com.shenji.audit.service.AffairService;
-import com.shenji.audit.service.MinioService;
 import com.shenji.audit.type.*;
 import com.shenji.audit.utils.IDKeyUtil;
+import com.shenji.audit.utils.MinioUtil;
 import com.shenji.audit.utils.ToPdf;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -37,7 +36,7 @@ public class AffairServiceImpl implements AffairService {
     private ApprovalMapper approvalMapper;
 
     @Resource
-    private MinioService minioService;
+    private UserMapper userMapper;
 
     /**
      *
@@ -49,10 +48,12 @@ public class AffairServiceImpl implements AffairService {
     @Override
     public void startAffair(Long userId, String name, String remark, Integer kind) {
 
+        User user = userMapper.selectOne(userId);
+
         Affair affair = new Affair();
         affair.setId(IDKeyUtil.generateId());
         affair.setPromoterId(userId);
-        affair.setApproverId(2L);
+        affair.setApproverPost(user.getPost() + 1);
 
         affair.setKind(kind);
         affair.setState(AffairType.STATE_READY);
@@ -91,8 +92,10 @@ public class AffairServiceImpl implements AffairService {
         }
 
         try {
-            minioService.putSomeDocument(affairId, MinioType.SOURCE_REPORT, files);
-            minioService.putDocument(affairId, MinioType.PDF_REPORT, ToPdf.genReport(files));
+            for(FileData file : files) {
+                MinioUtil.uploadFile(MinioType.sourcePrefix(affairId) + file.getName(), file.getData());
+            }
+            ToPdf.genReport(MinioType.pdfPrefix(affairId) + "报告.pdf", files);
         }catch (CustomException e) {
             log.error(e.getMsg());
         }
