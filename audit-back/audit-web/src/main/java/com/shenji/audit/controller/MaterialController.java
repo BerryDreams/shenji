@@ -5,8 +5,10 @@ import com.shenji.audit.common.RespBean;
 import com.shenji.audit.model.MaterialLog;
 import com.shenji.audit.service.MaterialService;
 import com.shenji.audit.type.RespType;
+import com.shenji.audit.utils.JwtUtil;
 import com.shenji.audit.utils.MinioUtil;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -36,12 +38,17 @@ public class MaterialController {
     @Autowired
     private MaterialService materialService;
 
+    @Autowired
+    private MinioUtil minioUtil;
+
+    @ApiImplicitParam(name = "affair_id", value = "事务ID", required = true, paramType="query", dataType = "Long",dataTypeClass = Long.class)
     @PostMapping("/material")
     @ApiOperation("上传资料")
-    public RespBean saveMaterial(@RequestParam("id")Long id,
+    public RespBean saveMaterial(@RequestParam("affair_id")Long affairId,
                                  @RequestParam("name")String name,
                                  @RequestParam("remark")String remark,
-                                 @RequestParam("files") MultipartFile[] files) {
+                                 @RequestParam("files") MultipartFile[] files,
+                                 @RequestHeader("token")String token) {
 
         if(files == null || files.length <= 0) {
             return RespBean.build(RespType.USER_INPUT_ERROR);
@@ -60,41 +67,50 @@ public class MaterialController {
             return RespBean.build(RespType.USER_INPUT_ERROR);
         }
 
-        materialService.uploadMaterial(1L, id, name, remark, fileDataList);
+        materialService.uploadMaterial(JwtUtil.decodeToken(token), affairId, name, remark, fileDataList);
         return RespBean.build(RespType.OK);
     }
 
+    @ApiImplicitParam(name = "affair_id", value = "事务ID", required = true, paramType="query", dataType = "Long",dataTypeClass = Long.class)
     @GetMapping("/material")
     @ApiOperation("获取资料列表")
-    public RespBean getMaterialList(@RequestParam("affair_id") Long id) {
-        List<MaterialLog> list = materialService.getMaterialList(1L, id);
+    public RespBean getMaterialList(@RequestParam("affair_id") Long id,
+                                    @RequestHeader("token")String token) {
+        List<MaterialLog> list = materialService.getMaterialList(JwtUtil.decodeToken(token), id);
         return RespBean.build(list, RespType.OK);
     }
 
+    @ApiImplicitParam(name = "material_id", value = "材料ID", required = true, paramType="path", dataType = "Long",dataTypeClass = Long.class)
     @GetMapping("/material/{material_id}")
     @ApiOperation("获取资料文件列表")
-    public RespBean getMaterialFileList(@PathVariable("material_id") Long id) {
-        List<String> list = materialService.getMaterialFolder(1L, id);
+    public RespBean getMaterialFileList(@PathVariable("material_id") Long id,
+                                        @RequestHeader("token")String token) {
+        List<String> list = materialService.getMaterialFolder(JwtUtil.decodeToken(token), id);
         return RespBean.build(list, RespType.OK);
     }
 
+    @ApiImplicitParam(name = "id", value = "材料ID", required = true, paramType="path", dataType = "Long",dataTypeClass = Long.class)
     @GetMapping("/material/{id}/{filename}")
     @ApiOperation("获取资料文件")
-    public ResponseEntity<byte[]> getMaterialFile(@PathVariable("id")Long id, @PathVariable("filename") String filename) {
-        FileData fileData = materialService.getMaterial(1L, id, filename);
+    public ResponseEntity<byte[]> getMaterialFile(@PathVariable("id")Long id,
+                                                  @PathVariable("filename") String filename,
+                                                  @RequestHeader("token")String token) {
+        FileData fileData = materialService.getMaterial(JwtUtil.decodeToken(token), id, filename);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         httpHeaders.add("Content-Disposition",
                 "attachment; filename=" +
                         new String(fileData.getName().getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1));
-        httpHeaders.set("Content-Type", MinioUtil.getContextType(filename));
+        httpHeaders.set("Content-Type", minioUtil.getContextType(filename));
         return new ResponseEntity<>(fileData.getData(), httpHeaders, HttpStatus.OK);
     }
 
+    @ApiImplicitParam(name = "id", value = "材料ID", required = true, paramType="path", dataType = "Long",dataTypeClass = Long.class)
     @DeleteMapping("/material/{id}")
     @ApiOperation("删除资料文件")
-    public RespBean delMaterial(@PathVariable("id")Long id) {
-        materialService.delMaterial(1L, id);
+    public RespBean delMaterial(@PathVariable("id")Long id,
+                                @RequestHeader("token")String token) {
+        materialService.delMaterial(JwtUtil.decodeToken(token), id);
         return RespBean.build(RespType.OK);
     }
 }

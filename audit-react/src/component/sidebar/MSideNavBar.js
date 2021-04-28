@@ -1,10 +1,8 @@
-import {Avatar, Box, Collapse, IconButton, List, ListItem, Typography} from "@material-ui/core";
+import {Box, IconButton, List, Typography} from "@material-ui/core";
 import {
     AssignmentTurnedIn,
-    ChevronRight,
     Home,
     HourglassFull,
-    KeyboardArrowDown,
     Menu,
     PostAdd
 } from "@material-ui/icons";
@@ -14,6 +12,8 @@ import {useState} from "react";
 import propTypes from "prop-types";
 import React from "react";
 import classnames from 'classnames'
+import MSideNavBarItemOnly from "./MSideNavBarItemOnly";
+import MSideNavBarItem from "./MSideNavBarItem";
 
 const useStyles = makeStyles((theme) => ({
     titleBoxNotShrink: {
@@ -40,20 +40,13 @@ const useStyles = makeStyles((theme) => ({
     title: {
         fontWeight: "bolder",
         color: theme.palette._info,
+        whiteSpace: 'nowrap',
         marginBottom: 0
     },
 
-    navListItemFather: {
-        color: 'rgba(0, 0, 0, 0.5)',
-        width: 'auto',
-        display: 'flex',
-        padding: '.8125rem 1rem !important',
-        fontSize: '.9rem',
-        fontWeight: 600,
-        fontFamily: "MSYaHei",
-        marginLeft: '.5rem',
-        marginRight: '.5rem',
-        borderRadius: '.375rem',
+    navIcon: {
+        width: '1.25rem !important',
+        height: '1.25rem !important',
     },
 
     navListItemChild: {
@@ -66,155 +59,8 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: '.375rem',
     },
 
-    navListItemTextChildNotShrink: {
-        marginLeft: 36
-    },
-
-    navListItemTextChildShrink: {
-        marginLeft: 2
-    },
-
-    navListItemFatherIconBox: {
-        display: 'flex',
-        minWidth: '2.25rem',
-        alignItems: 'center',
-    },
-    navIcon: {
-        width: '1.25rem !important',
-        height: '1.25rem !important',
-    },
-
-    navListItemFatherArrow: {
-        marginLeft: 'auto',
-        width: '1rem !important',
-        height: '1rem !important',
-        transition: 'all .15s ease',
-    },
 }));
 
-function ArrowElement(props) {
-
-    const {navListItemFatherArrow} = useStyles();
-
-    const {isExpand} = props;
-
-    return (
-        <React.Fragment>
-            {
-                isExpand ?
-                <KeyboardArrowDown className={navListItemFatherArrow}/>
-                :<ChevronRight className={navListItemFatherArrow}/>
-            }
-        </React.Fragment>
-    );
-}
-
-ArrowElement.propTypes = {
-    isExpand: propTypes.bool
-}
-
-function MSideNavBarItem(props) {
-
-    const classes = useStyles();
-
-    const {shrink, expand, name, title, icon, itemClick, list} = props;
-
-    let shrinkBlockF = null;
-
-    if(!shrink) {
-        shrinkBlockF = (
-            <React.Fragment>
-                {title}
-                <ArrowElement expand={expand}/>
-            </React.Fragment>
-        )
-    }
-
-    const child = list.map(item => {
-
-        let inner = null;
-
-        const itemTextClasses = classnames({
-            [classes.navListItemTextChildShrink]: shrink,
-            [classes.navListItemTextChildNotShrink]: !shrink,
-        })
-
-        if(!shrink) {
-            inner = <span className={itemTextClasses}>{item.title}</span>;
-        }else {
-            inner = <span className={itemTextClasses}>{item.title.charAt(0)}</span>;
-        }
-
-        return (
-            <ListItem
-                button
-                component="a"
-            >
-                {inner}
-            </ListItem>
-        );
-    });
-
-    return (
-        <React.Fragment>
-            <ListItem
-                button
-                component="a"
-                name={name}
-                className={classes.navListItemFather}
-                onClick={itemClick}
-            >
-                    <Box className={classes.navListItemFatherIconBox}>
-                        {icon}
-                    </Box>
-                    {shrinkBlockF}
-            </ListItem>
-            <Collapse in={expand} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                    {child}
-                </List>
-            </Collapse>
-        </React.Fragment>
-    );
-}
-
-MSideNavBarItem.propTypes = {
-    shrink: propTypes.bool,
-    expand: propTypes.bool,
-    name: propTypes.string,
-    title: propTypes.string,
-    icon: propTypes.node,
-    itemClick: propTypes.func,
-    list: propTypes.arrayOf(propTypes.shape({
-        title: propTypes.string,
-        url: propTypes.string
-    }))
-}
-
-function MSideNavBarItemOnly(props) {
-
-    const classes = useStyles();
-    const {title, icon, shrink} = props;
-
-    let name = null;
-    if(!shrink) {
-        name = title
-    }
-
-    return (
-        <ListItem button component="a" className={classes.navListItemFather}>
-            <Box className={classes.navListItemFatherIconBox}>
-                {icon}
-            </Box>
-            {name}
-        </ListItem>
-    );
-}
-MSideNavBarItemOnly.propTypes = {
-    shrink: propTypes.bool,
-    title: propTypes.string,
-    icon: propTypes.node,
-}
 
 
 export default function MSideNavBar(props) {

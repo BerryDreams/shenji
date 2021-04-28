@@ -1,0 +1,17 @@
+@font-face {
+    font-family: MSYaHei;
+    src: url("./msyhl.ttc");
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: MSYaHei;
+    src: url("./msyh.ttc");
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: MSYaHei;
+    src: url("./msyhbd.ttc");
+    font-weight: bold;
+}

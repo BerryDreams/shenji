@@ -4,4 +4,8 @@
     <select id="selectOne" resultType="com.shenji.audit.model.User">
         SELECT * FROM user WHERE id = #{id}
     </select>
+
+    <select id="selectByUsername" resultType="com.shenji.audit.model.User">
+        SELECT * FROM user WHERE username = #{username}
+    </select>
 </mapper>

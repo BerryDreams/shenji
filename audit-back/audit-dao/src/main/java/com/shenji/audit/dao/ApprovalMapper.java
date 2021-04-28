@@ -1,6 +1,9 @@
 package com.shenji.audit.dao;
 
+import com.shenji.audit.model.Affair;
 import com.shenji.audit.model.ApprovalLog;
+
+import java.util.List;
 
 /**
  * TODO
@@ -12,5 +15,8 @@ import com.shenji.audit.model.ApprovalLog;
 public interface ApprovalMapper {
 
     void insertOne(ApprovalLog approvalLog);
-    
+
+    List<Affair> getAffairByUserId(Long userId);
+
+    List<ApprovalLog> getApprovalLogByAffair(Long affairId);
 }

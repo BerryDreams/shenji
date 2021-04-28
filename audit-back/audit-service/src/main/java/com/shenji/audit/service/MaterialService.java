@@ -1,6 +1,5 @@
 package com.shenji.audit.service;
 
-import com.shenji.audit.common.CustomException;
 import com.shenji.audit.common.FileData;
 import com.shenji.audit.model.MaterialLog;
 

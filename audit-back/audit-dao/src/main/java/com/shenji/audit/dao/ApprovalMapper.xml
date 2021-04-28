@@ -5,4 +5,15 @@
         INSERT INTO approval_log(id, affair_id, create_time, is_pass, author_id, ip, msg, is_edit_source) VALUES
         (#{id}, #{affairId}, #{createTime}, #{isPass}, #{authorId}, #{ip}, #{msg}, #{isEditSource})
     </insert>
+
+    <select id="getAffairByUserId" resultType="com.shenji.audit.model.Affair" parameterType="Long">
+        SELECT distinct a.id, name, remark, kind, state, start_time, end_time, promoter_id, approver_post
+        FROM affair a right join approval_log al on a.id = al.affair_id
+        WHERE al.author_id = #{userId}
+    </select>
+
+    <select id="getApprovalLogByAffair" resultType="com.shenji.audit.model.ApprovalLog" parameterType="Long">
+        SELECT * FROM approval_log WHERE affair_id = #{affairId}
+        ORDER BY create_time
+    </select>
 </mapper>

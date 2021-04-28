@@ -19,11 +19,11 @@ public interface AffairMapper {
 
     List<Affair> getAffairByPromoterId(Long promoterId);
 
-    List<Affair> getAffairByApproverId(Long approverId);
+    List<Affair> getAffairByApproverPost(Integer post);
 
     List<Affair> selectAll();
 
     void updateState(Integer state, Long affairId);
 
-    void nextApprover();
+    void nextApprover(Long affairId);
 }

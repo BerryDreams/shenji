@@ -6,11 +6,12 @@ import io.minio.MinioClient;
 import io.minio.Result;
 import io.minio.messages.Item;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,17 +23,17 @@ import java.util.List;
  * @date 2021/3/22 18:53
  */
 @Slf4j
+@Component
 public class MinioUtil {
 
-    private static MinioClient minioClient;
+    @Autowired
+    private MinioClient minioClient;
+
+    private static final int DEFAULT_EXPIRY_TIME = 7 * 24 * 3600;
 
     private static final String bucketName = "audit";
 
-    static {
-        getMinioClient();
-    }
-
-    public static FileData getFileData(String fullPath) throws CustomException {
+    public FileData getFileData(String fullPath) throws CustomException {
         FileData fileData = new FileData();
         String filename = fullPath.substring(fullPath.lastIndexOf("/") + 1);
         fileData.setName(filename);
@@ -50,11 +51,7 @@ public class MinioUtil {
      * @return 文件流
      * @throws CustomException 标准异常
      */
-    public static InputStream getFile(String fullPath) throws CustomException {
-        if(minioClient == null) {
-            getMinioClient();
-        }
-
+    public InputStream getFile(String fullPath) throws CustomException {
         InputStream is = null;
 
         try {
@@ -71,7 +68,7 @@ public class MinioUtil {
      * @param prefix 文件前缀
      * @return
      */
-    public static List<String> listFile(String prefix) {
+    public List<String> listFile(String prefix) {
         List<String> fileList = new ArrayList<>();
         try {
             Iterable<Result<Item>> resultList = minioClient.listObjects(bucketName, prefix);
@@ -86,7 +83,7 @@ public class MinioUtil {
         return fileList;
     }
 
-    public static void uploadFile(String fullPath, byte[] file) throws CustomException {
+    public void uploadFile(String fullPath, byte[] file) throws CustomException {
         InputStream is = new ByteArrayInputStream(file);
         uploadFile(fullPath, is);
     }
@@ -97,10 +94,7 @@ public class MinioUtil {
      * @param is 文件数据流
      * @param fullPath 文件在桶中的路径
      */
-    public static void uploadFile(String fullPath, InputStream is) throws CustomException {
-        if(minioClient == null) {
-            getMinioClient();
-        }
+    public void uploadFile(String fullPath, InputStream is) throws CustomException {
         try {
             minioClient.putObject(bucketName, fullPath, is, is.available(), getContextType(fullPath));
         } catch (Exception e) {
@@ -112,10 +106,7 @@ public class MinioUtil {
      * 删除文件
      * @param fullPath 文件路径
      */
-    public static void delFile(String fullPath) throws CustomException {
-        if(minioClient == null) {
-            getMinioClient();
-        }
+    public void delFile(String fullPath) throws CustomException {
         try {
             minioClient.removeObject(bucketName, fullPath);
         } catch (Exception e) {
@@ -123,10 +114,7 @@ public class MinioUtil {
         }
     }
 
-    public static void delFolder(String prefix) throws CustomException {
-        if(minioClient == null) {
-            getMinioClient();
-        }
+    public void delFolder(String prefix) throws CustomException {
         try {
             Iterable<Result<Item>> resultList = minioClient.listObjects(bucketName, prefix);
             for (Result<Item> result : resultList) {
@@ -139,21 +127,12 @@ public class MinioUtil {
         }
     }
 
-    private static void getMinioClient() {
-        try {
-            minioClient = new MinioClient("http://10.2.9.173:8080", "miniolwtczg", "miniolwtczg");
-            log.info("创建minio成功");
-        } catch (Exception e) {
-            log.error("创建minioClient失败");
-        }
-    }
-
     /**
      * 获取文件类型,看是否为图片
      * @param filename 路径
      * @return 返回文件类型
      */
-    public static String getContextType(String filename){
+    public String getContextType(String filename){
         String type = filename.substring(filename.lastIndexOf(".") + 1);
         if("jpeg".equals(type)|| "png".equals(type)|| "gif".equals(type)|| "jpg".equals(type)){
             return "image/jpeg";
@@ -168,7 +147,7 @@ public class MinioUtil {
      * @param id 编号
      * @return 生成的字符串
      */
-    private static String getPrefix(String kind, Long id) {
+    private String getPrefix(String kind, Long id) {
         return kind + "/" + id.toString() + "/";
     }
 
@@ -180,7 +159,7 @@ public class MinioUtil {
      * @param filename 文件名
      * @return 生成的字符串
      */
-    private static String getInnerPath(String kind, Long id, String filename) {
+    private String getInnerPath(String kind, Long id, String filename) {
         return getPrefix(kind, id) + filename;
     }
 

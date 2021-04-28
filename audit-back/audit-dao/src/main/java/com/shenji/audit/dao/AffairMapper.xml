@@ -3,7 +3,7 @@
 <mapper namespace="com.shenji.audit.dao.AffairMapper" >
     <insert id="insertOne" parameterType="com.shenji.audit.model.Affair">
         INSERT INTO affair(id, name, remark, `kind`, `state`, start_time, end_time, promoter_id, approver_post)
-        VALUES(#{id}, #{name}, #{remark}, #{kind}, #{state}, #{startTime}, #{endTime}, #{promoterId}, #{approverId})
+        VALUES(#{id}, #{name}, #{remark}, #{kind}, #{state}, #{startTime}, #{endTime}, #{promoterId}, #{approverPost})
     </insert>
 
     <select id="getAffairById" parameterType="Long" resultType="com.shenji.audit.model.Affair">
@@ -14,8 +14,8 @@
         SELECT * FROM affair WHERE promoter_id = #{promoterId}
     </select>
 
-    <select id="getAffairByApproverId" parameterType="Long" resultType="com.shenji.audit.model.Affair">
-        SELECT * FROM affair WHERE approver_post = #{approverId}
+    <select id="getAffairByApproverPost" parameterType="Integer" resultType="com.shenji.audit.model.Affair">
+        SELECT * FROM affair WHERE approver_post = #{post} AND state = 11
     </select>
 
     <select id="selectAll" resultType="com.shenji.audit.model.Affair">
@@ -24,5 +24,9 @@
 
     <update id="updateState">
         UPDATE affair SET `state` = #{state} WHERE id = #{affairId}
+    </update>
+
+    <update id="nextApprover">
+        UPDATE affair SET approver_post = approver_post + 1 WHERE id = #{affairId}
     </update>
 </mapper>

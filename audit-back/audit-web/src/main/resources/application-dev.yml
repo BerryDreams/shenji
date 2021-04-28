@@ -4,6 +4,11 @@ spring:
     username: lwtczg
     password: lwtczg
     url: jdbc:mysql://baixx.site:3306/audit?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 1000MB
 
 mybatis:
   configuration:
@@ -15,3 +20,12 @@ server:
 logging:
   file:
     path: D:\\shenji
+
+minio:
+  endpoint: 10.2.9.173
+  port: 8080
+  accessKey: miniolwtczg
+  secretKey: miniolwtczg
+  secure: false
+  bucketName: "audit"
+  configDir: "/root/minio-data/"
