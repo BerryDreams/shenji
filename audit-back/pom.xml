@@ -21,7 +21,7 @@
     <name>audit</name>
     <description>审计处新一代物联化信息管理系统</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>1.8</java.version>
     </properties>
 
     <dependencies>

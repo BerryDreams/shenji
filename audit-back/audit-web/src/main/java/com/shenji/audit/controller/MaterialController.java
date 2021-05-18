@@ -1,14 +1,12 @@
 package com.shenji.audit.controller;
 
-import com.shenji.audit.common.FileData;
 import com.shenji.audit.common.RespBean;
+import com.shenji.audit.model.FileLog;
 import com.shenji.audit.model.MaterialLog;
 import com.shenji.audit.service.MaterialService;
-import com.shenji.audit.type.RespType;
 import com.shenji.audit.utils.JwtUtil;
 import com.shenji.audit.utils.MinioUtil;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -20,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,7 +38,6 @@ public class MaterialController {
     @Autowired
     private MinioUtil minioUtil;
 
-    @ApiImplicitParam(name = "affair_id", value = "事务ID", required = true, paramType="query", dataType = "Long",dataTypeClass = Long.class)
     @PostMapping("/material")
     @ApiOperation("上传资料")
     public RespBean saveMaterial(@RequestParam("affair_id")Long affairId,
@@ -51,66 +47,41 @@ public class MaterialController {
                                  @RequestHeader("token")String token) {
 
         if(files == null || files.length <= 0) {
-            return RespBean.build(RespType.USER_INPUT_ERROR);
+            return RespBean.error("用户输入错误");
         }
 
-        List<FileData> fileDataList = new ArrayList<>();
-
-        try {
-            for (MultipartFile file : files) {
-                FileData fileData = new FileData();
-                fileData.setName(file.getOriginalFilename());
-                fileData.setData(file.getBytes());
-                fileDataList.add(fileData);
-            }
-        } catch (IOException e) {
-            return RespBean.build(RespType.USER_INPUT_ERROR);
-        }
-
-        materialService.uploadMaterial(JwtUtil.decodeToken(token), affairId, name, remark, fileDataList);
-        return RespBean.build(RespType.OK);
+        materialService.uploadMaterial(JwtUtil.decodeToken(token), affairId, name, remark, files);
+        return RespBean.ok();
     }
 
-    @ApiImplicitParam(name = "affair_id", value = "事务ID", required = true, paramType="query", dataType = "Long",dataTypeClass = Long.class)
-    @GetMapping("/material")
+    @GetMapping("/material/{affair_id}")
     @ApiOperation("获取资料列表")
-    public RespBean getMaterialList(@RequestParam("affair_id") Long id,
+    public RespBean getMaterialList(@PathVariable("affair_id") Long id,
                                     @RequestHeader("token")String token) {
         List<MaterialLog> list = materialService.getMaterialList(JwtUtil.decodeToken(token), id);
-        return RespBean.build(list, RespType.OK);
+        return RespBean.ok(list);
     }
 
-    @ApiImplicitParam(name = "material_id", value = "材料ID", required = true, paramType="path", dataType = "Long",dataTypeClass = Long.class)
-    @GetMapping("/material/{material_id}")
+    @GetMapping("/material/source/{material_id}")
     @ApiOperation("获取资料文件列表")
     public RespBean getMaterialFileList(@PathVariable("material_id") Long id,
                                         @RequestHeader("token")String token) {
-        List<String> list = materialService.getMaterialFolder(JwtUtil.decodeToken(token), id);
-        return RespBean.build(list, RespType.OK);
+        List<FileLog> list = materialService.getMaterialFolder(JwtUtil.decodeToken(token), id);
+        return RespBean.ok(list);
     }
 
-    @ApiImplicitParam(name = "id", value = "材料ID", required = true, paramType="path", dataType = "Long",dataTypeClass = Long.class)
-    @GetMapping("/material/{id}/{filename}")
-    @ApiOperation("获取资料文件")
-    public ResponseEntity<byte[]> getMaterialFile(@PathVariable("id")Long id,
-                                                  @PathVariable("filename") String filename,
-                                                  @RequestHeader("token")String token) {
-        FileData fileData = materialService.getMaterial(JwtUtil.decodeToken(token), id, filename);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        httpHeaders.add("Content-Disposition",
-                "attachment; filename=" +
-                        new String(fileData.getName().getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1));
-        httpHeaders.set("Content-Type", minioUtil.getContextType(filename));
-        return new ResponseEntity<>(fileData.getData(), httpHeaders, HttpStatus.OK);
-    }
-
-    @ApiImplicitParam(name = "id", value = "材料ID", required = true, paramType="path", dataType = "Long",dataTypeClass = Long.class)
-    @DeleteMapping("/material/{id}")
-    @ApiOperation("删除资料文件")
-    public RespBean delMaterial(@PathVariable("id")Long id,
-                                @RequestHeader("token")String token) {
-        materialService.delMaterial(JwtUtil.decodeToken(token), id);
-        return RespBean.build(RespType.OK);
-    }
+//    @GetMapping("/material/source/{id}/{filename}")
+//    @ApiOperation("获取资料文件")
+//    public ResponseEntity<byte[]> getMaterialFile(@PathVariable("id")Long id,
+//                                                  @PathVariable("filename") String filename,
+//                                                  @RequestHeader("token")String token) throws IOException {
+//        byte[] fileData = materialService.getMaterial(JwtUtil.decodeToken(token), id, filename);
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+//        httpHeaders.add("Content-Disposition",
+//                "attachment; filename=" +
+//                        new String(filename.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1));
+//        httpHeaders.set("Content-Type", minioUtil.getContextType(filename));
+//        return new ResponseEntity<>(fileData, httpHeaders, HttpStatus.OK);
+//    }
 }

@@ -2,6 +2,7 @@ package com.shenji.audit.dao;
 
 import com.shenji.audit.model.Affair;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,6 +18,8 @@ public interface AffairMapper {
 
     Affair getAffairById(Long affairId);
 
+    List<Affair> getHistory();
+
     List<Affair> getAffairByPromoterId(Long promoterId);
 
     List<Affair> getAffairByApproverPost(Integer post);
@@ -24,6 +27,8 @@ public interface AffairMapper {
     List<Affair> selectAll();
 
     void updateState(Integer state, Long affairId);
+
+    void updateEndTime(Long affairId, Date time);
 
     void nextApprover(Long affairId);
 }

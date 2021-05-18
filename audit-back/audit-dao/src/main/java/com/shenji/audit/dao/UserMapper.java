@@ -14,4 +14,6 @@ public interface UserMapper {
     User selectOne(Long id);
 
     User selectByUsername(String username);
+
+    void addOne(User user);
 }

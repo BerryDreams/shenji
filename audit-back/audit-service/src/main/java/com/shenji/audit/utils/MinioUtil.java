@@ -1,7 +1,6 @@
 package com.shenji.audit.utils;
 
 import com.shenji.audit.common.CustomException;
-import com.shenji.audit.common.FileData;
 import io.minio.MinioClient;
 import io.minio.Result;
 import io.minio.messages.Item;
@@ -31,18 +30,20 @@ public class MinioUtil {
 
     private static final int DEFAULT_EXPIRY_TIME = 7 * 24 * 3600;
 
-    private static final String bucketName = "audit";
-
-    public FileData getFileData(String fullPath) throws CustomException {
-        FileData fileData = new FileData();
-        String filename = fullPath.substring(fullPath.lastIndexOf("/") + 1);
-        fileData.setName(filename);
+    public InputStream getCer() throws CustomException{
         try {
-            fileData.setData(getFile(fullPath).readAllBytes());
+            return minioClient.getObject("audit-config", "audit.pfx");
+        } catch (Exception e) {
+            throw new CustomException("获取证书错误");
+        }
+    }
+
+    public byte[] getFileData(String bucketName, String fullPath) throws CustomException {
+        try {
+            return ByteUtil.readBytes(getFile(bucketName, fullPath));
         }catch (IOException e) {
             throw new CustomException("字节转化错误");
         }
-        return fileData;
     }
 
     /**
@@ -51,7 +52,7 @@ public class MinioUtil {
      * @return 文件流
      * @throws CustomException 标准异常
      */
-    public InputStream getFile(String fullPath) throws CustomException {
+    public InputStream getFile(String bucketName, String fullPath) throws CustomException {
         InputStream is = null;
 
         try {
@@ -68,14 +69,15 @@ public class MinioUtil {
      * @param prefix 文件前缀
      * @return
      */
-    public List<String> listFile(String prefix) {
+    public List<String> listFile(String bucketName, String prefix) {
         List<String> fileList = new ArrayList<>();
         try {
             Iterable<Result<Item>> resultList = minioClient.listObjects(bucketName, prefix);
             for (Result<Item> result : resultList) {
                 Item item = result.get();
                 String name = item.objectName();
-                fileList.add(name);
+                String realName = name.substring(name.lastIndexOf("/") + 1);
+                fileList.add(realName);
             }
         } catch (Exception e) {
             throw new CustomException("上传文件错误");
@@ -83,9 +85,9 @@ public class MinioUtil {
         return fileList;
     }
 
-    public void uploadFile(String fullPath, byte[] file) throws CustomException {
+    public void uploadFile(String bucketName, String fullPath, byte[] file) throws CustomException {
         InputStream is = new ByteArrayInputStream(file);
-        uploadFile(fullPath, is);
+        uploadFile(bucketName, fullPath, is);
     }
 
 
@@ -94,7 +96,7 @@ public class MinioUtil {
      * @param is 文件数据流
      * @param fullPath 文件在桶中的路径
      */
-    public void uploadFile(String fullPath, InputStream is) throws CustomException {
+    public void uploadFile(String bucketName, String fullPath, InputStream is) throws CustomException {
         try {
             minioClient.putObject(bucketName, fullPath, is, is.available(), getContextType(fullPath));
         } catch (Exception e) {
@@ -106,7 +108,7 @@ public class MinioUtil {
      * 删除文件
      * @param fullPath 文件路径
      */
-    public void delFile(String fullPath) throws CustomException {
+    public void delFile(String bucketName, String fullPath) throws CustomException {
         try {
             minioClient.removeObject(bucketName, fullPath);
         } catch (Exception e) {
@@ -114,7 +116,7 @@ public class MinioUtil {
         }
     }
 
-    public void delFolder(String prefix) throws CustomException {
+    public void delFolder(String bucketName, String prefix) throws CustomException {
         try {
             Iterable<Result<Item>> resultList = minioClient.listObjects(bucketName, prefix);
             for (Result<Item> result : resultList) {

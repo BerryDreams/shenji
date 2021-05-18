@@ -4,10 +4,10 @@ export const MuiDrawerStyle = {
         flex: '0 0 auto',
         width: 250,
 
-        transition: 'width .2s ease-in-out 200ms',
-        '-moz-transition': 'width .2s ease-in-out 200ms', /* Firefox 4 */
-        '-webkit-transition': 'width .2s ease-in-out 200ms', /* Safari 和 Chrome */
-        '-o-transition': 'width .2s ease-in-out 200ms', /* Opera */
+        transition: 'width .25s linear 100ms',
+        '-moz-transition': 'width .25s linear 100ms', /* Firefox 4 */
+        '-webkit-transition': 'width .25s linear 100ms', /* Safari 和 Chrome */
+        '-o-transition': 'width .25s linear 100ms', /* Opera */
     },
 
     paper: {
@@ -25,9 +25,9 @@ export const MuiDrawerStyle = {
         paddingBottom: '1rem',
         '-webkit-overflow-scrolling': 'touch',
 
-        transition: 'width .2s ease-in-out 200ms',
-        '-moz-transition': 'width .2s ease-in-out 200ms', /* Firefox 4 */
-        '-webkit-transition': 'width .2s ease-in-out 200ms', /* Safari 和 Chrome */
-        '-o-transition': 'width .2s ease-in-out 200ms', /* Opera */
+        transition: 'width .25s linear 100ms',
+        '-moz-transition': 'width .25s linear 100ms', /* Firefox 4 */
+        '-webkit-transition': 'width .25s linear 100ms', /* Safari 和 Chrome */
+        '-o-transition': 'width .25s linear 100ms', /* Opera */
     }
 }

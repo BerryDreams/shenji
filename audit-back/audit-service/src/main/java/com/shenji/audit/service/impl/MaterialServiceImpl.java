@@ -1,19 +1,19 @@
 package com.shenji.audit.service.impl;
 
 import com.shenji.audit.common.CustomException;
-import com.shenji.audit.common.FileData;
 import com.shenji.audit.dao.AffairMapper;
 import com.shenji.audit.dao.MaterialMapper;
+import com.shenji.audit.model.FileLog;
 import com.shenji.audit.model.MaterialLog;
+import com.shenji.audit.service.FileService;
 import com.shenji.audit.service.MaterialService;
-import com.shenji.audit.type.AffairType;
-import com.shenji.audit.type.MinioType;
+import com.shenji.audit.common.AffairType;
 import com.shenji.audit.utils.IDKeyUtil;
-import com.shenji.audit.utils.MinioUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -38,15 +38,14 @@ public class MaterialServiceImpl implements MaterialService {
     private MaterialMapper materialMapper;
 
     @Autowired
-    private MinioUtil minioUtil;
+    private FileService fileService;
 
     @Override
-    public void uploadMaterial(Long userId, Long affairId, String name, String remark, List<FileData> fileList){
+    public void uploadMaterial(Long userId, Long affairId, String name, String remark, MultipartFile[] files){
 
         //判断是否可以上传
         if(!affairMapper.getAffairById(affairId).getState().equals(AffairType.STATE_READY)) {
             log.error("目前不可上传资料");
-            throw new CustomException("目前不可上传资料");
         }
 
         Long materialLogId = IDKeyUtil.generateId();
@@ -63,13 +62,11 @@ public class MaterialServiceImpl implements MaterialService {
         materialMapper.insertOne(materialLog);
 
         try {
-            for(FileData file : fileList) {
-                minioUtil.uploadFile(MinioType.materialPrefix(affairId, materialLogId) + file.getName(), file.getData());
-            }
+            fileService.insertMaterial(materialLogId, files);
         }catch (CustomException e) {
             log.error(e.getMsg());
+            throw e;
         }
-
     }
 
     @Override
@@ -78,26 +75,16 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public List<String> getMaterialFolder(Long userId, Long materialId) {
-        MaterialLog materialLog = materialMapper.selectOne(materialId);
-        return minioUtil.listFile(MinioType.materialPrefix(materialLog.getAffairId(), materialId));
-    }
-
-    @Override
-    public FileData getMaterial(Long userId, Long materialId, String filename) {
-        MaterialLog materialLog = materialMapper.selectOne(materialId);
-        return minioUtil.getFileData(MinioType.materialPrefix(materialLog.getAffairId(), materialId) + filename);
+    public List<FileLog> getMaterialFolder(Long userId, Long materialId) {
+        return fileService.listMaterialFiles(materialId);
     }
 
     @Override
     public void delMaterial(Long userId, Long materialId) {
         MaterialLog materialLog = materialMapper.selectOne(materialId);
-        minioUtil.delFolder(MinioType.materialPrefix(materialLog.getAffairId(), materialId));
-    }
-
-    @Override
-    public void delFile(Long userId, Long materialId, String filename) {
-        MaterialLog materialLog = materialMapper.selectOne(materialId);
-        minioUtil.delFile(MinioType.materialPrefix(materialLog.getAffairId(), materialId) + filename);
+        List<FileLog> fileLogList = fileService.listMaterialFiles(materialId);
+        for(FileLog fileLog : fileLogList) {
+            fileService.delFile(fileLog.getId());
+        }
     }
 }

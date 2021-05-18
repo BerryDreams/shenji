@@ -3,6 +3,7 @@ package com.shenji.audit.utils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.shenji.audit.common.CustomException;
 import com.shenji.audit.model.User;
 
 /**
@@ -44,7 +45,7 @@ public class JwtUtil {
         try {
             content = JWT.decode(token).getAudience().get(0);
         } catch (JWTDecodeException j) {
-            throw new RuntimeException("401 (jwt decode error)");
+            throw new CustomException("解码token失败");
         }
         return Long.parseLong(content.split(";;")[0]);
     }

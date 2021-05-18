@@ -1,76 +1,67 @@
-import {
-    Box,
-    Container,
-    Drawer,
-} from "@material-ui/core";
-import MTable from "../../component/MTable";
-import FormData from "../../__mocks__/FormData";
-import MBreadCrumbs from "../../component/MBreadCrumbs";
-import MAppBar from "../../component/MAppBar";
-import MSideNavBar from "../../component/sidebar/MSideNavBar";
-import {makeStyles} from "@material-ui/styles";
-import {useState} from "react";
-
+import { Box, Drawer } from '@material-ui/core';
+import MSideNavBar from '../../component/sidebar/MSideNavBar';
+import { makeStyles } from '@material-ui/styles';
+import { Route, Switch } from 'react-router-dom';
+import { useState } from 'react';
+import DashboardMain from './DashboardMain';
+import DashboardDetail from './DashboardDetail';
+import { connect } from 'react-redux';
+import { getUserAction } from '../../redux/action/UserAction';
+import React from 'react';
 const useStyles = makeStyles((theme) => ({
-    mainContent: {
-        maxWidth: "100%",
-        flex: "1 1 0%",
-        position: "relative"
-    },
+	shrink: {
+		width: 66,
+		overflowX: 'hidden',
 
-    shrink: {
-        width: 66,
-        overflowX: 'hidden',
-        transition: 'width .5s ease-in-out 200ms',
-        '-moz-transition': 'width .5s ease-in-out 200ms', /* Firefox 4 */
-        '-webkit-transition': 'width .5s ease-in-out 200ms', /* Safari 和 Chrome */
-        '-o-transition': 'width .5s ease-in-out 200ms', /* Opera */
-    },
-
-
-    breadcrumb: {
-        paddingBottom: "4.5rem",
-        position: "relative",
-        backgroundColor: '#11cdef'
-    },
+		transition: 'width .25s linear 100ms',
+		'-moz-transition': 'width .25s linear 100ms' /* Firefox 4 */,
+		'-webkit-transition': 'width .25s linear 100ms' /* Safari 和 Chrome */,
+		'-o-transition': 'width .25s linear 100ms' /* Opera */
+	}
 }));
 
-export default function DashboardLayout() {
+function DashboardLayout(props) {
+	const classes = useStyles();
+	const [shrink, setShrink] = useState(false);
+	const { getUserInfo } = props;
 
-    const classes = useStyles();
-    const [shrink, setShrink] = useState(false);
+	const openShrink = () => {
+		setShrink(!shrink);
+	};
 
-    const openShrink = () => {
-        setShrink(!shrink);
-    }
+	React.useEffect(() => {
+		getUserInfo();
+	}, []);
 
-    return (
-        <Box style={{display: "flex"}}>
-            <div>
-                <Drawer
-                    variant="permanent"
-                    anchor="left"
-                    classes={{
-                        paper: shrink ? classes.shrink : null,
-                        docked: shrink ? classes.shrink : null
-                    }}
-                >
-                    <MSideNavBar shrink={shrink} openShrink={openShrink}/>
-                </Drawer>
-            </div>
-            <Box className={classes.mainContent}>
-                <MAppBar/>
-                <div className={classes.breadcrumb}>
-                    <Container>
-                        <div style={{paddingTop: '1.5rem', paddingBottom: '1.5rem'}}>
-                            <MBreadCrumbs path="/audit/approve"/>
-                        </div>
-                    </Container>
-                </div>
-                <Container style={{marginTop: '-4.5rem'}}>
-                    <MTable title="我的历史" data={FormData} pageSize={5}/>
-                </Container>
-            </Box>
-        </Box>
-    );
+	return (
+		<Box style={{ display: 'flex' }}>
+			<div>
+				<Drawer
+					variant="permanent"
+					anchor="left"
+					classes={{
+						paper: shrink ? classes.shrink : null,
+						docked: shrink ? classes.shrink : null
+					}}
+				>
+					<MSideNavBar shrink={shrink} openShrink={openShrink} />
+				</Drawer>
+			</div>
+			<Switch>
+				<Route path="/affair/:id" component={DashboardDetail} />
+				<Route path="/" component={DashboardMain} />
+			</Switch>
+		</Box>
+	);
 }
+
+export default connect(
+	(state) => {
+		return {};
+	},
+	(dispatch) => {
+		return {
+			getUserInfo: () => dispatch(getUserAction())
+		};
+	}
+)(DashboardLayout);

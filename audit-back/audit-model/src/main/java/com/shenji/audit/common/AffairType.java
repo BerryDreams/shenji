@@ -1,4 +1,4 @@
-package com.shenji.audit.type;
+package com.shenji.audit.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +15,7 @@ public class AffairType {
     /**
      * 事务状态state
      */
-    public static final Integer STATE_READY = 10;                  //准备好可以审批
+    public static final Integer STATE_READY = 10;                  //准备好
     public static final Integer STATE_APPROVING = 11;              //审批中
     public static final Integer STATE_APPROVE_FAILED = 12;         //审批失败
     public static final Integer STATE_END = 13;                    //审批结束

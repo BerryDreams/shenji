@@ -1,7 +1,8 @@
 package com.shenji.audit.service;
 
-import com.shenji.audit.common.FileData;
+import com.shenji.audit.model.FileLog;
 import com.shenji.audit.model.MaterialLog;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -15,15 +16,11 @@ import java.util.List;
 public interface MaterialService {
 
 
-    void uploadMaterial(Long userId, Long affairId, String name, String remark, List<FileData> fileList);
+    void uploadMaterial(Long userId, Long affairId, String name, String remark, MultipartFile[] fileList);
 
     List<MaterialLog> getMaterialList(Long userId, Long affairId);
 
-    List<String> getMaterialFolder(Long userId, Long materialId);
-
-    FileData getMaterial(Long userId, Long materialId, String filename);
+    List<FileLog> getMaterialFolder(Long userId, Long materialId);
 
     void delMaterial(Long userId, Long materialId);
-
-    void delFile(Long userId, Long material, String filename);
 }

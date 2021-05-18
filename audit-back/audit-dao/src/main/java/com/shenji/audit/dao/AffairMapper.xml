@@ -10,6 +10,10 @@
         SELECT * FROM affair WHERE id = #{id}
     </select>
 
+    <select id="getHistory" parameterType="Long" resultType="com.shenji.audit.model.Affair">
+        SELECT * FROM affair WHERE state = 13
+    </select>
+
     <select id="getAffairByPromoterId" parameterType="Long" resultType="com.shenji.audit.model.Affair">
         SELECT * FROM affair WHERE promoter_id = #{promoterId}
     </select>
@@ -28,5 +32,9 @@
 
     <update id="nextApprover">
         UPDATE affair SET approver_post = approver_post + 1 WHERE id = #{affairId}
+    </update>
+
+    <update id="updateEndTime">
+        UPDATE affair SET end_time = #{time} WHERE id = #{affairId}
     </update>
 </mapper>

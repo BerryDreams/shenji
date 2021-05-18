@@ -1,6 +1,5 @@
 package com.shenji.audit.common;
 
-import com.shenji.audit.type.RespType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -36,15 +35,23 @@ public class RespBean {
         return new RespBean();
     }
 
-    public static RespBean build(RespType respType) {
-        return new RespBean(respType.getStatus(), respType.getMsg(), null);
+    public static RespBean build(CustomException e) {
+        return new RespBean(e.getStatus(), e.getMsg(), null);
     }
 
-    public static RespBean build(Object obj, RespType respType) {
-        return new RespBean(respType.getStatus(), respType.getMsg(), obj);
+    public static RespBean ok() {
+        return new RespBean("200", "成功", null);
     }
 
-    public static RespBean build(CustomException customException) {
-        return new RespBean(customException.getStatus(), customException.getMsg(), null);
+    public static RespBean ok(Object content) {
+        return new RespBean("200", "成功", content);
+    }
+
+    public static RespBean error(String status, String msg) {
+        return new RespBean(status, msg, null);
+    }
+
+    public static RespBean error(String msg) {
+        return new RespBean("500", msg, null);
     }
 }

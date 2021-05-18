@@ -8,4 +8,9 @@
     <select id="selectByUsername" resultType="com.shenji.audit.model.User">
         SELECT * FROM user WHERE username = #{username}
     </select>
+
+    <insert id="addOne" parameterType="com.shenji.audit.model.User">
+        INSERT INTO user(id, username, password, name, post)
+        VALUES (#{id}, #{username}, #{password}, #{name}, #{post})
+    </insert>
 </mapper>

@@ -8,9 +8,9 @@ import {
 	TimelineSeparator
 } from '@material-ui/lab';
 import { Paper, Typography } from '@material-ui/core';
-import { Check, DoneOutline, Fastfood } from '@material-ui/icons';
+import { Block, Done, DoneOutline } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/styles';
-import { getExactTime } from '../util/TimeFormat';
+import { getExactTime } from '../../../util/TimeFormat';
 import classnames from 'classnames';
 import React from 'react';
 
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-export default function TimeTree(props) {
+export default function ApprovalLogTree(props) {
 	const classes = useStyles();
 
 	const { approvalLog } = props;
@@ -55,7 +55,7 @@ export default function TimeTree(props) {
 						[classes.dotFailure]: !item.isPass
 					})}
 				>
-					<DoneOutline />
+					{item.isPass ? <Done /> : <Block />}
 				</TimelineDot>
 				<TimelineConnector />
 			</TimelineSeparator>

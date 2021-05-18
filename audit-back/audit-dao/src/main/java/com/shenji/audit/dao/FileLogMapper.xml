@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shenji.audit.dao.FileLogMapper" >
+    <select id="listItems" resultType="com.shenji.audit.model.FileLog">
+        SELECT * FROM file_log WHERE from_id = #{fromId} AND type = #{type}
+    </select>
+
+    <select id="selectOne" resultType="com.shenji.audit.model.FileLog">
+        SELECT * FROM file_log WHERE id = #{fileLogId}
+    </select>
+
+    <insert id="insertOne" parameterType="com.shenji.audit.model.FileLog">
+        insert into file_log(id, upload_time, type, bucket_name, prefix, filename, size, from_id)
+        VALUES (#{id}, #{uploadTime}, #{type}, #{bucketName}, #{prefix}, #{filename}, #{size}, #{fromId})
+    </insert>
+
+    <update id="updateOne">
+        UPDATE file_log SET
+            filename = #{filename}, size = #{size}, upload_time = #{updateTime}
+        WHERE id = {fileLogId}
+    </update>
+
+    <delete id="delOne">
+        DELETE FROM file_log WHERE id = #{fileLogId}
+    </delete>
+</mapper>
