@@ -46,7 +46,7 @@ public class SignUtil {
     private KeyStore keyStore;
     private KeyPair keyPair;
     private Certificate certificate;
-    private final String PFX_PASS = "catdogcola";
+    private final String PFX_PASS = "******";
     private InputStream pfx;
 
     private void getKey() throws Exception {
