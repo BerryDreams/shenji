@@ -1,9 +1,9 @@
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    username: lwtczg
-    password: lwtczg
-    url: jdbc:mysql://baixx.site:3306/audit?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: ******
+    password: ******
+    url: jdbc:mysql://******:3306/******?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
   servlet:
     multipart:
       enabled: true
@@ -22,10 +22,10 @@ logging:
     path: /root/tomcat
 
 minio:
-  endpoint: 10.2.9.173
+  endpoint: ******
   port: 8080
-  accessKey: miniolwtczg
-  secretKey: miniolwtczg
+  accessKey: ******
+  secretKey: ******
   secure: false
   bucketName: "audit"
   configDir: "/root/minio-data/"
